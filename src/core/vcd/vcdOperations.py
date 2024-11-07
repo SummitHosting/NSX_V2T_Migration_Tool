@@ -112,9 +112,11 @@ class VCloudDirectorOperations(ConfigureEdgeGatewayServices):
                             ipSpace['name'], errorResponse['message']))
             else:
                 for targetExtNetSubnet in targetExtNetData['subnets']['values']:
+                    x = targetExtNetSubnet['ipRanges']['values']
+                    logger.debug(f'Target[ipRanges][values]={x}')
                     targetExtNetSubnetAddress = ipaddress.ip_network(
                         '{}/{}'.format(targetExtNetSubnet['gateway'], targetExtNetSubnet['prefixLength']), strict=False)
-                    targetExtNetSubnet['ipRanges']['values'].extend(sourceEgwSubnets.get(targetExtNetSubnetAddress, []))
+                    x.extend(sourceEgwSubnets.get(targetExtNetSubnetAddress, []))
 
                 url = "{}{}/{}".format(vcdConstants.OPEN_API_URL.format(self.ipAddress),
                                        vcdConstants.ALL_EXTERNAL_NETWORKS, targetExtNetData['id'])
